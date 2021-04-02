@@ -1,17 +1,46 @@
-import React from 'react';
-import Header from './components/Header';
+import React from "react";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Browse from "./components/Browse";
+import Arrive from "./components/Arrive";
+import Client from "./components/Client";
+import Sidemenu from "./components/Sidemenu";
+import Footer from "./components/Footer";
 
 function App() {
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(function () {
+    (async function () {
+      const response = await fetch(
+        "https://prod-qore-app.qorebase.io/8ySrll0jkMkSJVk/allItems/rows?limit=7&offset=0&$order=asc",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+            "x-api-key": process.env.REACT_APP_API_KEY,
+          },
+        }
+      );
+      const { nodes } = await response.json();
+      setItems(nodes);
+
+      const scriptCarousel = document.createElement("script");
+      scriptCarousel.src = "/carousel.js";
+      scriptCarousel.async = false;
+      document.body.appendChild(scriptCarousel);
+    })();
+  }, []);
+
   return (
     <div className="App">
       <Header />
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-          </div>
-        </div>
-      </main>
+      <Hero />
+      <Browse />
+      <Arrive items={items} />
+      <Client />
+      <Sidemenu />
+      <Footer />
     </div>
   );
 }
