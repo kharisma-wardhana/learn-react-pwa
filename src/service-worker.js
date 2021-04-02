@@ -83,7 +83,7 @@ registerRoute(
   new NetworkFirst({
     cacheName: "api_data",
     plugins: [
-      ExpirationPlugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60,
         maxEntries: 30,
       }),
